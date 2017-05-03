@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+        
+    <var name="subcategory" class="com.example.j2eeapp.domain.SubCategoryEntity"/>
+    <input name="categoryName" required="true"/>
+    
+	<view-state id="insertSubcategory" view="insertSubcategory.xhtml">
+	<transition on="confirmSubcategory" to="viewSubcategory">
+	 <evaluate expression="subCategoryService.createSubcategory(subcategory,categoryName)"/>
+	</transition>
+	 <transition on="showSubcategory" to="viewSubcategory"/>
+	 <transition on="cancelSubcatInsertion" to="cancelInsertion"/>
+	</view-state>
+	
+	<view-state id="viewSubcategory" view="viewSubcategory.xhtml">
+	  <on-render>
+	   <evaluate expression="subCategoryService.loadAllSubCategories()" result="flowScope.subcategories" result-type="dataModel"/>
+	  </on-render>
+	  <transition on="insertProduct" to="insertProductDetails">
+	   <set name="flowScope.subcategory" value="subcategories.selectedRow"/>
+	  </transition>
+	  <transition on="backToInsertSubcategory" to="insertSubcategory"/>
+	</view-state>
+	<subflow-state id="insertProductDetails" subflow="product">
+	 <input name="subCatName" value="subcategory.subCatName"/>
+	<transition on="cancelProInsertion" to="viewSubcategory"/>
+	</subflow-state>
+	
+	<end-state id="cancelInsertion"/>
+
+</flow>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+        
+        <!-- flow scope variable -->
+        <var name="user" class="com.example.j2eeapp.domain.UserEntity"/> <!-- when a flow is initiated an instance of this variable
+                                                                          will be created to server memory and it will be destroyed
+                                                                           after that flow we can not use the variable to other flow 
+                                                                           until we use some special approach.   -->
+	<view-state id="welcome" view="welcome.xhtml">
+		<transition on="newUser" to="signUp" />
+		<transition on="confirmSignIn" to="finish">
+			<evaluate expression="userAuthenticationProviderService.processUserAuthentication(user)" />
+		</transition>
+	</view-state>
+
+	<view-state id="signUp" view="signUp.xhtml" model="user">
+		<transition on="backToSignIn" to="welcome" />
+		<transition on="confirmSignUp" to="authentication">
+			<evaluate expression="userService.createUser(user)" />
+		</transition>
+	</view-state>
+	
+	<action-state id="authentication">
+		<evaluate expression="userAuthenticationProviderService.processUserAuthentication(user)" />
+		<transition on="yes" to="finish" />
+		<transition on="no" to="welcome" />
+	</action-state>
+	
+	<subflow-state id="finish" subflow="showallproduct">
+	  <transition on="backToHomepage" to="welcome"/>
+	</subflow-state>
+	
+</flow>

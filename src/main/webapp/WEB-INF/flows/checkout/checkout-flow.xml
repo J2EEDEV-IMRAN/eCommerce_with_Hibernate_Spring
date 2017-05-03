@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+     <secured attributes="ROLE_USER"/>
+     <var name="getdelivercost" class="com.example.j2eeapp.domain.DeliverCostEntity"/>
+     <input name="icost" required="true"/>
+	 <input name="icountry" required="true"/>
+	 <input name="iprice" required="true"/>
+	 <input name="itotal" required="true"/>
+     <on-start>
+        <evaluate expression="productOrderDetailsService.loaCountry()" result="flowScope.country"/>
+        <evaluate expression="productOrderDetailsService.loaRegion()" result="flowScope.region"/>
+        <evaluate expression="productOrderDetailsService.loaCartSubTotal(currentUser.name)" result="flowScope.cartsubtotal"/>
+        <evaluate expression="userService.loadUserEntityByUsername(currentUser.name)" result="flowScope.userDetails"/>
+     </on-start>
+
+	<view-state id="showCheckout" view="showCheckout.xhtml">
+	   <var name="cartsS" class="com.example.j2eeapp.dataselection.ProductOrderDetailsSelection"/>
+	  
+	  <on-render>
+	   <evaluate expression="productOrderDetailsService.showcartByUserAndStatue(currentUser.name)" result="flowScope.carts" />
+	  </on-render>
+	  
+	  <transition on="increase">
+	    <set name="flowScope.cartS" value="cartsS.selected"/>
+	    <evaluate expression="productOrderDetailsService.increaseProductCountTotal(cartS.proName,currentUser.name)"/>
+	  </transition>
+	  
+	  <transition on="decrease">
+	    <set name="flowScope.cartS" value="cartsS.selected"/>
+	    <evaluate expression="productOrderDetailsService.decreaseProductCountTotal(cartS.proName,currentUser.name)"/>
+	  </transition>
+	  
+	  <transition on="addShippingCost">
+	    <set name="flowScope.cname" value="getdelivercost.countryName"/>
+	    <set name="flowScope.rname" value="getdelivercost.regionName"/>
+	    <evaluate expression="orderService.setShippingPrice(cname,rname)" result="flowScope.deliveryCost"/>
+	  </transition>
+	  <transition on="finalOrderCart">
+	    <evaluate expression="productOrderDetailsService.loaCartSubTotal(currentUser.name)" result="flowScope.cartsubtotal"/>
+	  </transition>
+	  <transition on="loadTotal">
+	    <set name="flowScope.dcost" value="getdelivercost.deliveryCost"/>
+	    <evaluate expression="productOrderDetailsService.loaTotal(dcost,currentUser.name)" result="flowScope.total"/>
+	 </transition>
+	</view-state>
+
+</flow>

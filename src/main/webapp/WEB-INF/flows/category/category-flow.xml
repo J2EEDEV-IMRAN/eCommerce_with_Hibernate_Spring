@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+        <var name="category" class="com.example.j2eeapp.domain.CategoryEntity"/>
+
+	<view-state id="insertCategory" view="insertCategory.xhtml">
+	  <transition on="confirmCategory" to="viewCategory">
+	   <evaluate expression="categoryService.createCategory(category)"/>
+	  </transition>
+	  <transition on="showCategory" to="viewCategory"/>
+	</view-state>
+	
+	<view-state id="viewCategory" view="viewCategory.xhtml">
+	  <on-render>
+	      <evaluate expression="categoryService.loadAllCategory()" result="flowScope.categories" result-type="dataModel"/>
+	  </on-render>
+	  <transition on="edit" to="editCategories">
+	    <set name="flowScope.category" value="categories.selectedRow"/>
+	  </transition>
+	  <transition on="insertSubcat" to="insertSubcatDetails">
+	   <set name="flowScope.category" value="categories.selectedRow"/>
+	  </transition>
+	  <transition on="backToInsertCategory" to="insertCategory"/>
+	</view-state>
+	
+	<view-state id="editCategories" view="editCategories.xhtml">
+	<transition on="updateCategory" to="viewCategory">
+	  <evaluate expression="categoryService.updateCategory(category)"/>
+	</transition>
+	<transition on="backToShowCategory" to="viewCategory"/>
+	</view-state>
+	
+	<subflow-state id="insertSubcatDetails" subflow="subcategory">
+	  <input name="categoryName" value="category.catName"/>
+	  <transition on="cancelInsertion" to="viewCategory"/>
+	</subflow-state>
+
+</flow>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+      <var name="user" class="com.example.j2eeapp.domain.UserEntity"/>
+
+	<view-state id="viewUsers" view="viewUsers.xhtml">
+	  <on-render>
+	     <evaluate expression="userService.loadAllUsers()" result="flowScope.users" result-type="dataModel" />
+	  </on-render>
+	  <transition on="activateUser">
+	     <evaluate expression="userService.activateUser(users.selectedRow)"/>
+	  </transition>
+	  <transition on="delete">
+	     <evaluate expression="userService.deleteUser(users.selectedRow)"/>
+	  </transition>
+	 
+	</view-state>
+</flow>

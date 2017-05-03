@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:c="http://java.sun.com/jsp/jstl/core"
+	  xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:b="http://bootsfaces.net/ui">
+      
+<f:view contentType="text/html">
+
+	<h:head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<title><ui:insert name="title" /></title>
+		<link rel="stylesheet" type="text/css" href="${request.contextPath}/resources/css/jquery-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="${request.contextPath}/resources/css/theam.css" />
+		<link rel="stylesheet" type="text/css" href="${request.contextPath}/resources/css/bootstrap.min.css" />
+		<link rel="stylesheet" type="text/css" href="${request.contextPath}/resources/css/style.css" />
+		<link rel="shortcut icon" href="${request.contextPath}/resources/css/images/logo.png" />
+		<!-- <script src="${request.contextPath}/resources/js/jquery-ui.min.js"/> -->
+	</h:head>
+	
+	<h:body>
+		<p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+		<p:dialog widgetVar="statusDialog" modal="true" draggable="true" closable="false"  header="Processing...">
+		    <p:graphicImage value="/css/images/ajaxloadingbar.gif" />
+		</p:dialog>
+		
+		 <!--menu start-->
+    <b:navBar brandImg="${request.contextPath}/resources/css/images/logo.png"  inverse="true" brandHref="#">
+        <b:container>
+            <b:navbarLinks>
+                <b:navLink value="home" iconAwesome="home" href="/app/coursesview"></b:navLink>
+                <b:navLink value="Courses Overview" href="/app/coursesoverview"></b:navLink>
+                <b:navLink value="Course Lectures" href="#"></b:navLink>
+                <b:navLink value="Lab Examples" href="#"></b:navLink>
+            </b:navbarLinks>
+            
+             <!-- Following line is needed for TBS 3.0.1 (panel content overflow issue) -->
+		    <b:navbarLinks pull="right"><b:navLink value="    " href="#"></b:navLink></b:navbarLinks>
+		      <b:navbarLinks pull="right" styleClass="hidden-xs">
+				 <b:navLink value="login" href="/app/main"></b:navLink>
+				  <b:navLink value="Users" href="/app/users"></b:navLink>
+		         <b:navLink value="Logout" href="${request.contextPath}/app/logout"></b:navLink>
+				<!-- 
+				<c:if test="${not empty currentUser.name}">
+		         <b:navLink value="Logout" href="${request.contextPath}/app/logout"></b:navLink>
+				</c:if>
+				 -->
+		    </b:navbarLinks>
+        </b:container>
+    </b:navBar>
+       <!--navbar end-->
+			
+		<c:choose>
+		        <c:when test="${pageContext.request.isUserInRole('admin')}">
+		            <p>Content for admin.</p>
+		        </c:when>
+		        <c:when test="${pageContext.request.isUserInRole('user')}">
+		            <p>Content for user</p>
+		        </c:when>
+		        <c:otherwise>
+		           	<div id="container">
+					<div id="header">
+						<h1><ui:insert name="header" /></h1>
+					</div>
+					<div id="content">
+						<ui:insert name="content" />
+					</div>
+					<div id="footer">
+						<ui:insert name="footer" />
+					</div>
+			</div>
+		        </c:otherwise>
+       </c:choose> 
+       
+    
+		
+	</h:body>
+	
+
+</f:view>
+</html>

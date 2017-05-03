@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:ui="http://java.sun.com/jsf/facelets"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:p="http://primefaces.org/ui"
+		xmlns:c="http://java.sun.com/jsp/jstl/core"
+		template="/WEB-INF/templates/general.xhtml">
+	
+	<ui:define name="title"><h:outputText value="Enter product" /></ui:define>
+	<ui:define name="header"><h:outputText value="Enter Product" /></ui:define>
+	
+	<ui:define name="content">
+	  <div class="container">
+            <h:form styleClass="form-horizontal" >
+				<p:focus />
+				<p:messages id="messages" globalOnly="true"/>
+				
+				 <div class="form-group form-group-lg" style="position:relative" >
+							<h:outputText styleClass="control-label col-sm-2"  value="Product Name:" /><h:outputText styleClass="control-label" value="*" style="position:absolute;margin-right:380px;color: #b32020;font-size: 30px;"/>
+							<div class="col-sm-10 col-md-6">
+							   <p:inputText id="proName" styleClass="form-control" value="#{product.proName}" required="true" autocomplete="off">
+						            <f:validateLength minimum="2" />
+					           </p:inputText>
+					            <p:watermark for="proName" value="Product Name" />
+					             <p:message for="proName"  id="pnMsg"/>
+						<p:tooltip  for="proName" value="Enter product name!"
+               showEffect="clip" hideEffect="explode" />
+							</div>	
+                     </div>
+                     
+                         <div class="form-group form-group-lg" style="position:relative">
+							<h:outputText styleClass="control-label col-sm-2"  value="Product Quantity:" /><h:outputText styleClass="control-label" value="*" style="position:absolute;margin-right:380px;color: #b32020;font-size: 30px;"/>
+							<div class="col-sm-10 col-md-6">
+							   <p:inputText id="proQty" styleClass="form-control" value="#{product.proQty}" required="true"  autocomplete="off"/>
+					           <p:watermark for="proQty" value="Product Quantity"/>
+					            <p:message for="proQty" id="pqMsg"/>
+								<p:tooltip  for="proQty" value="Enter product quantity!"
+               showEffect="clip" hideEffect="explode" />
+							</div>	
+                     </div>
+                     
+                           <div class="form-group form-group-lg" style="position:relative">
+							<h:outputText styleClass="control-label col-sm-2"  value="Product Price:" /><h:outputText styleClass="control-label" value="*" style="position:absolute;margin-right:380px;color: #b32020;font-size: 30px;"/>
+							<div class="col-sm-10 col-md-6">
+							   <p:inputText id="proPrice" styleClass="form-control" value="#{product.proPrice}" required="true"  autocomplete="off"/>
+					           <p:watermark for="proPrice" value="Product Price"/>
+					            <p:message for="proPrice" id="ppMsg"/>
+								<p:tooltip  for="proPrice" value="Enter product price!"
+               showEffect="clip" hideEffect="explode" />
+							</div>	
+                     </div>
+                     
+                           <div class="form-group form-group-lg" style="position:relative">
+							<h:outputText styleClass="control-label col-sm-2"  value="Product Description:" /><h:outputText styleClass="control-label" value="*" style="position:absolute;margin-right:380px;color: #b32020;font-size: 30px;"/>
+							<div class="col-sm-10 col-md-6">
+							   <p:inputTextarea id="proDesc" styleClass="form-control" value="#{product.proDesc}" required="true" autoResize="false" autocomplete="off">
+							    <f:validateLength minimum="6"/>
+							   </p:inputTextarea>
+					           <p:watermark for="proDesc" value="Product Description"/>
+					            <p:message for="proDesc" id="pdMsg"/>
+								<p:tooltip  for="proDesc" value="Enter product description!"
+               showEffect="clip" hideEffect="explode" />
+							</div>	
+                     </div>
+              
+                     <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                             <p:commandButton id="confirmProduct" styleClass="btn btn-primary" action="confirmProduct" update="messages,pnMsg,pqMsg,ppMsg,pdMsg"  value="Save" />
+                              <p:commandButton id="showProduct" styleClass="btn btn-primary" action="showProduct" immediate="true" icon="fa fa-mail-reply" value="View Product" />
+                        </div>
+                      </div>
+                   
+		</h:form>
+	  </div>
+	</ui:define>
+	
+</ui:composition>

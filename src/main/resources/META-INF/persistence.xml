@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
+		http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd" version="1.0">
+		
+	<persistence-unit name="default" transaction-type="RESOURCE_LOCAL">
+		
+		<class>com.example.j2eeapp.domain.UserEntity</class>
+		<class>com.example.j2eeapp.domain.UserRoleEntity</class>
+		<class>com.example.j2eeapp.domain.CategoryEntity</class>
+		<class>com.example.j2eeapp.domain.SubCategoryEntity</class>
+		<class>com.example.j2eeapp.domain.ProductEntity</class>
+		<class>com.example.j2eeapp.domain.ProductOrderDetailsEntity</class>
+		<class>com.example.j2eeapp.domain.DeliverCostEntity</class>
+		<class>com.example.j2eeapp.domain.OrdersEntity</class>
+		
+	</persistence-unit>
+</persistence>

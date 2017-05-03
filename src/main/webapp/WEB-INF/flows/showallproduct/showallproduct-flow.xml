@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+        
+
+	<view-state id="showAllProduct" view="showAllProduct.xhtml">
+	 <var name="product" class="com.example.j2eeapp.domain.ProductEntity"/>
+	 <var name="poroductsS" class="com.example.j2eeapp.dataselection.ProductSelection"/>
+	 <var name="subcatsS" class="com.example.j2eeapp.dataselection.SubCategorySelection"/>
+	 <on-render>
+	      <evaluate expression="productService.loadAllProduct()" result="flowScope.products"/>
+	      <evaluate expression="categoryService.loadAllSubCategoryByCategory()" result="flowScope.category"/>
+	 </on-render>
+	 <transition on="addToCart">
+	   <secured attributes="ROLE_USER"/>
+	   <set name="flowScope.productS" value="poroductsS.selected"/>
+	   <evaluate expression="productOrderDetailsService.addToOrder(productS.id,currentUser.name)"/>
+	 </transition>
+	  <transition on="addWishList">
+	   <secured attributes="ROLE_USER"/>
+	   <set name="flowScope.productS" value="poroductsS.selected"/>
+	   <evaluate expression="wishListService.addToWishList(productS.id,currentUser.name)"/>
+	 </transition>
+	 <transition on="productBySubCategory" to="productBySubCat">
+	    <set name="flowScope.subcatS" value="subcatsS.selected"/>
+	 </transition>
+	</view-state>
+	
+	<view-state id="productBySubCat" view="productsBySubCat.xhtml">
+	<var name="poroductsS" class="com.example.j2eeapp.dataselection.ProductSelection"/>
+	<var name="subcatsS" class="com.example.j2eeapp.dataselection.SubCategorySelection"/>
+	<on-render>
+	  <evaluate expression="subCategoryService.loadProductBySubCategory(subcatS.id)" result="flowScope.productsBySubCat" />
+	  <evaluate expression="categoryService.loadAllSubCategoryByCategory()" result="flowScope.category"/>
+	</on-render>  
+		 
+      <transition on="addToCart">
+	   <secured attributes="ROLE_USER"/>
+	   <set name="flowScope.productS" value="poroductsS.selected"/>
+	   <evaluate expression="productOrderDetailsService.addToOrder(productS.id,currentUser.name)"/>
+	 </transition>
+	  <transition on="addWishList">
+	   <secured attributes="ROLE_USER"/>
+	   <set name="flowScope.productS" value="poroductsS.selected"/>
+	   <evaluate expression="wishListService.addToWishList(productS.id,currentUser.name)"/>
+	 </transition>
+	<transition on="productBySubCat">
+	    <set name="flowScope.subcatS" value="subcatsS.selected"/>
+	    <evaluate expression="subCategoryService.loadProductBySubCategory(subcatS.id)" result="flowScope.productsBySubCat" />
+	 </transition>
+	</view-state>
+
+</flow>

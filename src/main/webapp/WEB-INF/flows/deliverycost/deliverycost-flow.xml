@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+        <var name="deliverycost" class="com.example.j2eeapp.domain.DeliverCostEntity"/>
+
+	<view-state id="insertDeliveryCost" view="insertDeliveryCost.xhtml">
+	  <transition on="confirmCost" to="viewCost">
+	   <evaluate expression="deliverCostService.createCost(deliverycost)"/>
+	  </transition>
+	  <transition on="showCost" to="viewCost"/>
+	</view-state>
+	
+	<view-state id="viewCost" view="viewCost.xhtml">
+	  <on-render>
+	      <evaluate expression="deliverCostService.loadAllCosts()" result="flowScope.costs" result-type="dataModel"/>
+	  </on-render>
+	  <transition on="edit" to="editCost">
+	    <set name="flowScope.cost" value="costs.selectedRow"/>
+	  </transition>
+	  <transition on="delete">
+	    <evaluate expression="deliverCostService.deleteCost(costs.selectedRow)"/>
+	  </transition>
+	  <transition on="backToInsertCost" to="insertDeliveryCost"/>
+	</view-state>
+	
+	<view-state id="editCost" view="editCost.xhtml">
+	<transition on="updateCost" to="viewCost">
+	  <evaluate expression="deliverCostService.updateCost(cost)"/>
+	</transition>
+	<transition on="backToshowCost" to="viewCost"/>
+	</view-state>
+
+</flow>

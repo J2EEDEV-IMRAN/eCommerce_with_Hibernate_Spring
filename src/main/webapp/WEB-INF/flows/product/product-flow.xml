@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+        <var name="product" class="com.example.j2eeapp.domain.ProductEntity"/>
+        <input name="subCatName" required="true"/>
+
+	<view-state id="insertProduct" view="insertProduct.xhtml">
+	   <transition on="confirmProduct" to="viewProduct">
+	   <evaluate expression="productService.createProduct(product,subCatName)"/>
+	   </transition>
+	   <transition on="showProduct" to="viewProduct"/>
+	</view-state>
+	
+	<view-state id="viewProduct" view="viewProduct.xhtml">
+	  <on-render>
+	   <evaluate expression="productService.loadAllProduct()" result="flowScope.products" result-type="dataModel"/>
+	  </on-render>
+	  <transition on="edit" to="editProduct">
+	    <set name="flowScope.product" value="products.selectedRow"/>
+	  </transition>
+	  <transition on="delete">
+	    <evaluate expression="productService.deleteProduct(products.selectedRow)"/>
+	  </transition>
+	  <transition on="backToInsertSubCategory" to="insertProduct"/>
+	</view-state>
+	
+	<view-state id="editProduct" view="editProduct.xhtml">
+	  <transition on="updateProduct" to="viewProduct">
+	    <evaluate expression="productService.updateProduct(product)"/>
+	  </transition>
+	  <transition on="backToShowProduct" to="viewProduct"/>
+	</view-state>
+
+</flow>
